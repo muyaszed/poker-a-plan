@@ -9,8 +9,8 @@ function Sessions() {
     const [welcomeMessage, setWelcomMessage] = useState('');
 
     useEffect(() => {
-        console.log('Load session first time')
-        socket = io("https://poker-a-plan.herokuapp.com");
+        console.log('Load session first time', process.env.REACT_APP_BACK_END_POINT )
+        socket = io(process.env.REACT_APP_BACK_END_POINT  || "http://localhost:5000");
         socket.emit('join', {
             sessionId: params.sessionId,
             sessionName: params.sessionName,

@@ -3,13 +3,13 @@ const express = require("express");
 const path = require("path");
 const { Server } = require("socket.io");
 require("dotenv").config();
-
+console.log('Env:', process.env.CLIENT_ORIGIN)
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        // origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
-        origin: "https://poker-a-plan.herokuapp.com",
+        origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+        // origin: "https://poker-a-plan.herokuapp.com",
         methods: ["GET", "POST"],
     }
 });
