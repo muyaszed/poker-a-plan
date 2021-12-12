@@ -10,7 +10,7 @@ function Sessions() {
 
     useEffect(() => {
         console.log('Load session first time')
-        socket = io("http://localhost:5000");
+        socket = io("https://poker-a-plan.herokuapp.com");
         socket.emit('join', {
             sessionId: params.sessionId,
             sessionName: params.sessionName,
