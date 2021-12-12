@@ -2,16 +2,14 @@ const http = require("http");
 const express = require("express");
 const path = require("path");
 const { Server } = require("socket.io");
+const { addUser, getUsers, removeUser } = require("./user");
 require("dotenv").config();
 
-
-console.log('Env:', process.env.NODE_ENV)
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: process.env.NODE_ENV === 'production' ? "https://poker-a-plan.herokuapp.com" : "http://localhost:3000",
-        // origin: "https://poker-a-plan.herokuapp.com",
         methods: ["GET", "POST"],
     }
 });
@@ -22,15 +20,29 @@ io.on("connection", (socket) => {
     console.log('Websocket connection establish');
 
     socket.on('join', ({ sessionId, sessionName, name}, callback) => {
+        console.log('join', sessionId, sessionName, name)
+        const { user, error } = addUser({
+            id: socket.id, 
+            name, 
+            room: sessionId,
+        });
+        console.log('after add user', user, error, getUsers(sessionId))
+        if (error) return callback(error)
+        socket.join(sessionId);
         socket.emit('welcome', {
             text: `Welcome to ${sessionName}. ${name}`,
         })
-        socket.join(sessionId);
+        io.in(sessionId).emit('all-users', getUsers(sessionId))
         callback(null);
     });
 
     socket.on('disconnect', ()=> {
         console.log('Websocket disconnected')
+        const user = removeUser(socket.id)
+        console.log('removed user', user);
+        if (user) {
+            io.in(user.room).emit('all-users', getUsers(user.room))
+        }
     });
 })
 
