@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/sessions/:sessionId' element={<Session />} />
+        <Route path='/sessions/:sessionId/:sessionName/:name' element={<Session />} />
      </Routes>
     </div>
   );
