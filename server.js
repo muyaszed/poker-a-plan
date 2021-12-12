@@ -1,5 +1,6 @@
 const http = require("http");
 const express = require("express");
+const path = require("path");
 const { Server } = require("socket.io");
 
 const app = express();
@@ -11,6 +12,7 @@ const io = new Server(server, {
     }
 });
 const PORT = process.env.PORT || 5000;
+app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 io.on("connection", (socket) => {
     console.log('Websocket connection establish');
