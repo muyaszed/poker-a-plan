@@ -65,10 +65,11 @@ function Sessions() {
     }, [])
 
     function getSharedURL() {
-        let url = window.location.href.split('/');
-        url.splice(6);
+        // let url = window.location.href.split('/');
+        // url.splice(6);
 
-        return url.join('/');
+        // return url.join('/');
+        return `${window.location.origin}/#/sessionsUser/${params.sessionId}/${params.sessionName}`
     }
 
     function handleNumberSelection(e: React.MouseEvent<HTMLDivElement>) {
