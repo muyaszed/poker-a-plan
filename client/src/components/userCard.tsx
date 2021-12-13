@@ -1,13 +1,16 @@
+import { User } from "../pages/sessions";
+
 export interface UserCardProps {
-    userId: string;
-    userName: string;
+    user: User;
+    showResult: boolean;
 }
 
-function UserCard({ userId, userName }: UserCardProps) {
-    console.log(userId)
+function UserCard({ user, showResult }: UserCardProps) {
+    console.log(user.id)
     return (
-        <div className="user-card" key={userId}>
-            {userName}
+        <div className="user-card" key={user.id}>
+            <div>{user.name}</div>
+            {showResult && <div>{user.selection}</div>}
         </div>
     );
 }

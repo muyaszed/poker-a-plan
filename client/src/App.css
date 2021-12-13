@@ -21,9 +21,9 @@
   border: 1px solid black;
   margin: 20px 50px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   border-radius: 10px;
 }
 
@@ -38,6 +38,19 @@
   cursor: pointer;
   border-radius: 3px;
 
+}
+
+.selection-card-active{
+  width: 20px;
+  height: 40px;
+  border: 1px solid black;
+  margin: 20px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: brown;
 }
 
 .invite-url {

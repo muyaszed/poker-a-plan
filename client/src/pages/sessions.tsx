@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import io, {Socket} from 'socket.io-client';
 import UserCard from '../components/userCard';
 
@@ -7,6 +7,7 @@ export interface User {
     id: string;
     name: string;
     room: string;
+    selection: string;
 }
 
 let socket: Socket;
@@ -16,7 +17,8 @@ function Sessions() {
     const [welcomeMessage, setWelcomMessage] = useState('');
     const [users, setUsers] = useState<User[]>([]);
     const [admin, setAdmin] = useState(false);
-    const location = useLocation();
+    const [selectedNumber, setSelectedNumber] = useState<string | null>(null);
+    const [showResult, setShowResult] = useState(false);
 
     useEffect(() => {
         if(params.admin === 'true') {
@@ -42,12 +44,25 @@ function Sessions() {
         }) => {
             setWelcomMessage(text);
         });
+    }, []);
+
+    useEffect(() => {
         socket.on('all-users', ({
             users
         }) => {
             setUsers(users)
         })
+
     }, []);
+
+    useEffect(() => {
+        socket.on('show-result', ({
+            showResult
+        }) => {
+            setShowResult(showResult);
+        })
+
+    }, [])
 
     function getSharedURL() {
         let url = window.location.href.split('/');
@@ -56,17 +71,40 @@ function Sessions() {
         return url.join('/');
     }
 
+    function handleNumberSelection(e: React.MouseEvent<HTMLDivElement>) {
+        setSelectedNumber(e.currentTarget.id);
+        console.log('handleNumberSeelction',params)
+        socket.emit('user-select', {
+            userSelection: e.currentTarget.id,
+            sessionId: params.sessionId,
+        }, (error: string) => {
+            if(error) {
+                console.log(error);
+            }
+        })
+    }
+
+    function handleShowResult() {
+        socket.emit('request-show-result', {
+            sessionId: params.sessionId,
+        }, (error: string) => {
+            if(error) {
+                console.log(error);
+            }
+        })
+    }
+
     return (
         <div>
             <h1>{params.sessionName}</h1>
             <p>{welcomeMessage}</p>
             <div className="main-group-container">
-                {users.map(user => <UserCard key={user.id} userName={user.name} userId={user.id} />)}
+                {users.map(user => <UserCard key={user.id} user={user} showResult={showResult} />)}
             </div>
-            {admin && <button>Show result</button>}
+            {admin && <button onClick={handleShowResult}>Show result</button>}
             <div className="selection-list-container">
                 {[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, '?'].map(selection => (
-                    <div className="selection-card">{selection}</div>
+                    <div className={selectedNumber === selection.toString() ? 'selection-card-active' : 'selection-card'} id={selection.toString()} onClick={handleNumberSelection}>{selection}</div>
                 ))}
             </div>
             {admin && <div>

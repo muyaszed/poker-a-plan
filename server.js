@@ -2,7 +2,7 @@ const http = require("http");
 const express = require("express");
 const path = require("path");
 const { Server } = require("socket.io");
-const { addUser, getUsers, removeUser } = require("./user");
+const { addUser, getUsers, removeUser, updateUser } = require("./user");
 require("dotenv").config();
 
 const app = express();
@@ -32,9 +32,28 @@ io.on("connection", (socket) => {
         socket.emit('welcome', {
             text: `Welcome ${name}`,
         })
-        io.in(sessionId).emit('all-users', getUsers(sessionId))
+        io.in(sessionId).emit('all-users', getUsers(sessionId));
+
+        
         callback(null);
     });
+    socket.on('user-select', ({userSelection, sessionId}, callback) => {
+        console.log('User select')
+        updateUser(socket.id, userSelection);
+        console.log(getUsers(sessionId))
+        io.in(sessionId).emit('all-users', getUsers(sessionId));
+        callback(null);
+    })
+
+    socket.on('request-show-result', ({
+        sessionId,
+    }, callback) => {
+        io.in(sessionId).emit('show-result', {
+            showResult: true,
+        });
+
+        callback(null);
+    })
 
     socket.on('disconnect', ()=> {
         console.log('Websocket disconnected')

@@ -11,7 +11,8 @@ function addUser({ id, name, room}) {
     const user = {
         id,
         name,
-        room
+        room,
+        selection: null,
     };
 
     users.push(user)
@@ -28,6 +29,16 @@ function getUsers(room) {
     return {users: users.filter(user => user.room === room)};
 }
 
+function updateUser(id, userSelection) {
+    users = users.map(user => user.id === id ? {
+        ...user,
+        selection: userSelection,
+    } : user);
+
+    console.log(users)
+}
+
 exports.addUser = addUser;
 exports.getUsers = getUsers;
 exports.removeUser = removeUser;
+exports.updateUser = updateUser;
