@@ -65,4 +65,8 @@ io.on("connection", (socket) => {
     });
 })
 
+app.get('/', (req, res) => {
+    res.send("Server is up and running")
+})
+
 server.listen(PORT, () => console.log("Server is now connected to " + PORT)) 
