@@ -26,7 +26,7 @@ function Home() {
 
     return (
         <div>
-            <h1>Poke A Plan</h1>
+            <h1>Poker A Plan</h1>
             <input name="session-name" value={sessionInfo.sessionName} onChange={handleSessionIfoChange} type="text" placeholder="Session name"/>
             <Link to={`/sessionsAdmin/${Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}/${sessionInfo.sessionName}/`}>
                 <button >New session</button>
