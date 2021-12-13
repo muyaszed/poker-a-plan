@@ -1,3 +1,58 @@
 .App {
   text-align: center;
 }
+
+.main-group-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.selection-list-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.user-card {
+  width: 80px;
+  height: 150px;
+  border: 1px solid black;
+  margin: 20px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.selection-card {
+  width: 20px;
+  height: 40px;
+  border: 1px solid black;
+  margin: 20px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 3px;
+
+}
+
+.invite-url {
+  width: 500px;
+  height: 30px;
+}
+
+@media only screen and (min-width: 1024px) {
+  .main-group-container {
+    width: 1024px;
+    margin: auto;
+   
+  }
+
+  .selection-list-container {
+    width: 1024px;
+    margin: auto;  }
+}

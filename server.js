@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
         if (error) return callback(error)
         socket.join(sessionId);
         socket.emit('welcome', {
-            text: `Welcome to ${sessionName}. ${name}`,
+            text: `Welcome ${name}`,
         })
         io.in(sessionId).emit('all-users', getUsers(sessionId))
         callback(null);
