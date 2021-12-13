@@ -18,29 +18,27 @@ app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 io.on("connection", (socket) => {
     console.log('Websocket connection establish');
-
     socket.on('join', ({ sessionId, sessionName, name}, callback) => {
-        console.log('join', sessionId, sessionName, name)
         const { user, error } = addUser({
             id: socket.id, 
             name, 
             room: sessionId,
         });
-        console.log('after add user', user, error, getUsers(sessionId))
+
         if (error) return callback(error)
+
         socket.join(sessionId);
+
         socket.emit('welcome', {
             text: `Welcome ${name}`,
         })
+
         io.in(sessionId).emit('all-users', getUsers(sessionId));
 
-        
         callback(null);
     });
     socket.on('user-select', ({userSelection, sessionId}, callback) => {
-        console.log('User select')
         updateUser(socket.id, userSelection);
-        console.log(getUsers(sessionId))
         io.in(sessionId).emit('all-users', getUsers(sessionId));
         callback(null);
     })
@@ -58,7 +56,6 @@ io.on("connection", (socket) => {
     socket.on('disconnect', ()=> {
         console.log('Websocket disconnected')
         const user = removeUser(socket.id)
-        console.log('removed user', user);
         if (user) {
             io.in(user.room).emit('all-users', getUsers(user.room))
         }

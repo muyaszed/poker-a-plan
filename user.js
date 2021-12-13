@@ -1,7 +1,6 @@
 let users = [];
 
 function addUser({ id, name, room}) {
-    console.log(id, name, room)
     if(!name || !room) {
         return {
             error: 'Username and room are required',
@@ -34,8 +33,6 @@ function updateUser(id, userSelection) {
         ...user,
         selection: userSelection,
     } : user);
-
-    console.log(users)
 }
 
 exports.addUser = addUser;
