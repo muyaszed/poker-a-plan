@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
 })
 
 app.get('/*', (request, response) => {
-    response.sendFile(path.join(__dirname, './client/public/index.html'));
+    response.sendFile(path.join(__dirname, './client/build'));
 });
 
 server.listen(PORT, () => console.log("Server is now connected to " + PORT)) 
