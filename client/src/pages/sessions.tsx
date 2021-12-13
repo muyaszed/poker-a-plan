@@ -19,6 +19,7 @@ function Sessions() {
     const [admin, setAdmin] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState<string | null>(null);
     const [showResult, setShowResult] = useState(false);
+    const [resultDisabled, setResutlDisabled] = useState(true);
 
     useEffect(() => {
         if(params.admin === 'true') {
@@ -35,7 +36,6 @@ function Sessions() {
             }
         })
 
-        
     }, []);
 
     useEffect(() => {
@@ -50,7 +50,9 @@ function Sessions() {
         socket.on('all-users', ({
             users
         }) => {
-            setUsers(users)
+            setUsers(users);
+            console.log('all-users', users)
+            setResutlDisabled(!users.every((user: User) => user.selection !== null));
         })
 
     }, []);
@@ -95,12 +97,12 @@ function Sessions() {
 
     return (
         <div>
-            <h1>{params.sessionName}</h1>
+            <h1>{params.sessionName?.split('%').join(' ')}</h1>
             <p>{welcomeMessage}</p>
             <div className="main-group-container">
                 {users.map(user => <UserCard key={user.id} user={user} showResult={showResult} />)}
             </div>
-            {admin && <button onClick={handleShowResult}>Show result</button>}
+            {admin && <button disabled={resultDisabled} onClick={handleShowResult}>Show result</button>}
             <div className="selection-list-container">
                 {[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, '?'].map(selection => (
                     <div className={selectedNumber === selection.toString() ? 'selection-card-active' : 'selection-card'} id={selection.toString()} onClick={handleNumberSelection}>{selection}</div>
