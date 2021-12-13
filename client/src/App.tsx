@@ -12,8 +12,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/sessions/:sessionId/:sessionName/:name/:admin' element={<Session />} />
-        <Route path='/sessions/:sessionId/:sessionName' element={<SessionUser />} />
+        <Route path='sessions/:sessionId/:sessionName/:name/:admin' element={<Session />} />
+        <Route path='sessions/:sessionId/:sessionName' element={<SessionUser />} />
      </Routes>
     </div>
   );
