@@ -6,7 +6,6 @@ export interface UserCardProps {
 }
 
 function UserCard({ user, showResult }: UserCardProps) {
-    console.log(user.id)
     return (
         <div className="user-card" key={user.id}>
             {user.selection && <div>( Done )</div>}
