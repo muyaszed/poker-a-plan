@@ -8,59 +8,59 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: process.env.NODE_ENV === 'production' ? "https://poker-a-plan.herokuapp.com" : "http://localhost:3000",
-        methods: ["GET", "POST"],
-    }
+  cors: {
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_BACK_END_POINT
+        : "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
 });
 const PORT = process.env.PORT || 5000;
 app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 io.on("connection", (socket) => {
-    console.log('Websocket connection establish');
-    socket.on('join', ({ sessionId, sessionName, name}, callback) => {
-        const { user, error } = addUser({
-            id: socket.id, 
-            name, 
-            room: sessionId,
-        });
-
-        if (error) return callback(error)
-
-        socket.join(sessionId);
-
-        socket.emit('welcome', {
-            text: `Welcome ${name}`,
-        })
-
-        io.in(sessionId).emit('all-users', getUsers(sessionId));
-
-        callback(null);
+  console.log("Websocket connection establish");
+  socket.on("join", ({ sessionId, sessionName, name }, callback) => {
+    const { user, error } = addUser({
+      id: socket.id,
+      name,
+      room: sessionId,
     });
-    socket.on('user-select', ({userSelection, sessionId}, callback) => {
-        updateUser(socket.id, userSelection);
-        io.in(sessionId).emit('all-users', getUsers(sessionId));
-        callback(null);
-    })
 
-    socket.on('request-show-result', ({
-        sessionId,
-    }, callback) => {
-        io.in(sessionId).emit('show-result', {
-            showResult: true,
-        });
+    if (error) return callback(error);
 
-        callback(null);
-    })
+    socket.join(sessionId);
 
-    socket.on('disconnect', ()=> {
-        console.log('Websocket disconnected')
-        const user = removeUser(socket.id)
-        if (user) {
-            io.in(user.room).emit('all-users', getUsers(user.room))
-        }
+    socket.emit("welcome", {
+      text: `Welcome ${name}`,
     });
-})
 
+    io.in(sessionId).emit("all-users", getUsers(sessionId));
 
-server.listen(PORT, () => console.log("Server is now connected to " + PORT)) 
+    callback(null);
+  });
+  socket.on("user-select", ({ userSelection, sessionId }, callback) => {
+    updateUser(socket.id, userSelection);
+    io.in(sessionId).emit("all-users", getUsers(sessionId));
+    callback(null);
+  });
+
+  socket.on("request-show-result", ({ sessionId }, callback) => {
+    io.in(sessionId).emit("show-result", {
+      showResult: true,
+    });
+
+    callback(null);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Websocket disconnected");
+    const user = removeUser(socket.id);
+    if (user) {
+      io.in(user.room).emit("all-users", getUsers(user.room));
+    }
+  });
+});
+
+server.listen(PORT, () => console.log("Server is now connected to " + PORT));
