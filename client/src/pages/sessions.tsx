@@ -28,7 +28,7 @@ function Sessions() {
     socket = io(
       process.env.NODE_ENV === "development"
         ? "http://localhost:5000"
-        : "https://poker-a-plan.herokuapp.com/"
+        : process.env.REACT_APP_BACK_END_POINT || ""
     );
     socket.emit(
       "join",
