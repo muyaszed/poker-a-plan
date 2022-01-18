@@ -10,6 +10,7 @@ function UserCard({ user, showResult }: UserCardProps) {
     <div className="user-card" key={user.id}>
       {user.selection && <div>( Done )</div>}
       <div>{user.name}</div>
+      {user.admin && <div>( Admin )</div>}
       {showResult && !user.viewOnly && (
         <div className="user-selection">{user.selection}</div>
       )}
