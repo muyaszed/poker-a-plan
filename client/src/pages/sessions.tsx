@@ -8,6 +8,8 @@ export interface User {
   name: string;
   room: string;
   selection: string;
+  admin: boolean;
+  viewOnly: boolean;
 }
 
 let socket: Socket;
@@ -16,15 +18,16 @@ function Sessions() {
   const params = useParams();
   const [welcomeMessage, setWelcomMessage] = useState("");
   const [users, setUsers] = useState<User[]>([]);
-  const [admin, setAdmin] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // const [admin, setAdmin] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [resultDisabled, setResutlDisabled] = useState(true);
 
   useEffect(() => {
-    if (params.admin === "true") {
-      setAdmin(true);
-    }
+    // if (params.admin === "true") {
+    //   setAdmin(true);
+    // }
     socket = io(
       process.env.NODE_ENV === "development"
         ? "http://localhost:5000"
@@ -36,6 +39,8 @@ function Sessions() {
         sessionId: params.sessionId,
         sessionName: params.sessionName,
         name: params.name,
+        admin: params.sessionType === "admin" ? true : false,
+        viewOnly: params.sessionType === "view" ? true : false,
       },
       (error: string) => {
         if (error) {
@@ -43,11 +48,12 @@ function Sessions() {
         }
       }
     );
-  }, [params.admin, params.name, params.sessionId, params.sessionName]);
+  }, [params.name, params.sessionId, params.sessionName, params.sessionType]);
 
   useEffect(() => {
-    socket.on("welcome", ({ text }) => {
+    socket.on("welcome", ({ text, user }) => {
       setWelcomMessage(text);
+      setCurrentUser(user);
     });
   }, []);
 
@@ -55,7 +61,11 @@ function Sessions() {
     socket.on("all-users", ({ users }) => {
       setUsers(users);
       console.log("all-users", users);
-      setResutlDisabled(!users.every((user: User) => user.selection !== null));
+      setResutlDisabled(
+        !users
+          .filter((user: User) => !user.viewOnly)
+          .every((filteredUser: User) => filteredUser.selection !== null)
+      );
     });
   }, []);
 
@@ -102,36 +112,64 @@ function Sessions() {
     );
   }
 
+  console.log(currentUser);
+
+  if (!currentUser) {
+    return null;
+  }
+
   return (
     <div>
       <h1>{params.sessionName?.split("%").join(" ")}</h1>
       <p>{welcomeMessage}</p>
       <div className="main-group-container">
-        {users.map((user) => (
-          <UserCard key={user.id} user={user} showResult={showResult} />
-        ))}
+        {users
+          .filter((user) => !user.viewOnly)
+          .map((filteredUser) => (
+            <UserCard
+              key={filteredUser.id}
+              user={filteredUser}
+              showResult={showResult}
+            />
+          ))}
       </div>
-      {admin && (
+      {currentUser.admin && (
         <button disabled={resultDisabled} onClick={handleShowResult}>
           Show result
         </button>
       )}
-      <div className="selection-list-container">
-        {[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, "?"].map((selection) => (
-          <div
-            className={
-              selectedNumber === selection.toString()
-                ? "selection-card-active"
-                : "selection-card"
-            }
-            id={selection.toString()}
-            onClick={handleNumberSelection}
-          >
-            {selection}
-          </div>
-        ))}
+      {!currentUser.viewOnly && (
+        <div className="selection-list-container">
+          {[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, "?"].map((selection) => (
+            <div
+              className={
+                selectedNumber === selection.toString()
+                  ? "selection-card-active"
+                  : "selection-card"
+              }
+              id={selection.toString()}
+              onClick={handleNumberSelection}
+            >
+              {selection}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {users.some((user) => user.viewOnly) && <p>Visitors</p>}
+      <div className="main-group-container">
+        {users
+          .filter((user) => user.viewOnly)
+          .map((filteredUser) => (
+            <UserCard
+              key={filteredUser.id}
+              user={filteredUser}
+              showResult={showResult}
+            />
+          ))}
       </div>
-      {admin && (
+
+      {currentUser.admin && (
         <div>
           <div>Invite people with this url</div>
           <input

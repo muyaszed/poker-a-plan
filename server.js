@@ -21,25 +21,31 @@ app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 io.on("connection", (socket) => {
   console.log("Websocket connection establish");
-  socket.on("join", ({ sessionId, sessionName, name }, callback) => {
-    const { user, error } = addUser({
-      id: socket.id,
-      name,
-      room: sessionId,
-    });
+  socket.on(
+    "join",
+    ({ sessionId, sessionName, name, admin, viewOnly }, callback) => {
+      const { user, error } = addUser({
+        id: socket.id,
+        name,
+        room: sessionId,
+        admin,
+        viewOnly,
+      });
 
-    if (error) return callback(error);
+      if (error) return callback(error);
 
-    socket.join(sessionId);
+      socket.join(sessionId);
 
-    socket.emit("welcome", {
-      text: `Welcome ${name}`,
-    });
+      socket.emit("welcome", {
+        user,
+        text: `Welcome ${name}`,
+      });
 
-    io.in(sessionId).emit("all-users", getUsers(sessionId));
+      io.in(sessionId).emit("all-users", getUsers(sessionId));
 
-    callback(null);
-  });
+      callback(null);
+    }
+  );
   socket.on("user-select", ({ userSelection, sessionId }, callback) => {
     updateUser(socket.id, userSelection);
     io.in(sessionId).emit("all-users", getUsers(sessionId));
