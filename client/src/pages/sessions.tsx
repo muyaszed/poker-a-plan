@@ -48,7 +48,13 @@ function Sessions() {
         }
       }
     );
-  }, [params.name, params.sessionId, params.sessionName, params.sessionType]);
+  }, [
+    params.admin,
+    params.name,
+    params.sessionId,
+    params.sessionName,
+    params.sessionType,
+  ]);
 
   useEffect(() => {
     socket.on("welcome", ({ text, user }) => {
@@ -62,9 +68,11 @@ function Sessions() {
       setUsers(users);
       console.log("all-users", users);
       setResutlDisabled(
-        !users
-          .filter((user: User) => !user.viewOnly)
-          .every((filteredUser: User) => filteredUser.selection !== null)
+        users.filter((user: User) => !user.viewOnly).length
+          ? !users
+              .filter((user: User) => !user.viewOnly)
+              .every((filteredUser: User) => filteredUser.selection !== null)
+          : true
       );
     });
   }, []);
