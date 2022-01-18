@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         {/* <Route path='sessions/:sessionId/:sessionName/:name/:admin' element={<Session />} /> */}
         <Route
-          path="sessions/:sessionId/:sessionName/:name/:sessionType"
+          path="sessions/:sessionId/:sessionName/:name/:admin/:sessionType"
           element={<Session />}
         />
         <Route

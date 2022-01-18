@@ -22,9 +22,9 @@ function SessionUser() {
         type="checkbox"
       />
       <Link
-        to={`/sessions/${params.sessionId}/${params.sessionName}/${userName}/${
-          viewOnly ? "view" : "user"
-        }`}
+        to={`/sessions/${params.sessionId}/${
+          params.sessionName
+        }/${userName}/false/${viewOnly ? "view" : "user"}`}
       >
         <button>Enter</button>
       </Link>

@@ -6,6 +6,7 @@ function Home() {
     sessionName: "",
     adminName: "",
   });
+  const [viewOnly, setViewOnly] = useState(false);
 
   function handleSessionIfoChange(event: ChangeEvent<HTMLInputElement>): void {
     if (event.target.name === "session-name") {
@@ -40,12 +41,19 @@ function Home() {
         type="text"
         placeholder="Admin name"
       />
+      <label>Spectator mode</label>
+      <input
+        onChange={() => setViewOnly((prevState) => !prevState)}
+        type="checkbox"
+      />
 
       <Link
         to={`/sessions/${
           Math.random().toString(36).substring(2, 15) +
           Math.random().toString(36).substring(2, 15)
-        }/${sessionInfo.sessionName}/${sessionInfo.adminName}/admin`}
+        }/${sessionInfo.sessionName}/${sessionInfo.adminName}/true/${
+          viewOnly ? "view" : "user"
+        }`}
       >
         {/* <Link to={`/sessionsAdmin/${Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}/${sessionInfo.sessionName}/`}> */}
         <button>New session</button>

@@ -39,7 +39,7 @@ function Sessions() {
         sessionId: params.sessionId,
         sessionName: params.sessionName,
         name: params.name,
-        admin: params.sessionType === "admin" ? true : false,
+        admin: params.admin === "true" ? true : false,
         viewOnly: params.sessionType === "view" ? true : false,
       },
       (error: string) => {
