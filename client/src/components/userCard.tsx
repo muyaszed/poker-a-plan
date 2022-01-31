@@ -8,9 +8,13 @@ export interface UserCardProps {
 function UserCard({ user, showResult }: UserCardProps) {
   return (
     <div className="user-card" key={user.id}>
+      {user.admin && (
+        <div className="ribbon ribbon-top-right">
+          <span>admin</span>
+        </div>
+      )}
       {user.selection && <div>( Done )</div>}
       <div>{user.name}</div>
-      {user.admin && <div>( Admin )</div>}
       {showResult && !user.viewOnly && (
         <div className="user-selection">{user.selection}</div>
       )}

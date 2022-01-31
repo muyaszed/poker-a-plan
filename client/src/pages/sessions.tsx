@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
 import UserCard from "../components/userCard";
+import logo from "../assets/images/logo.png";
 
 export interface User {
   id: string;
@@ -19,15 +20,11 @@ function Sessions() {
   const [welcomeMessage, setWelcomMessage] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  // const [admin, setAdmin] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [resultDisabled, setResutlDisabled] = useState(true);
 
   useEffect(() => {
-    // if (params.admin === "true") {
-    //   setAdmin(true);
-    // }
     socket = io(
       process.env.NODE_ENV === "development"
         ? "http://localhost:5000"
@@ -127,9 +124,17 @@ function Sessions() {
   }
 
   return (
-    <div>
-      <h1>{params.sessionName?.split("%").join(" ")}</h1>
-      <p>{welcomeMessage}</p>
+    <div className="session-container">
+      <div className="header">
+        <div className="main-logo">
+          <img src={logo} alt="logo" />
+        </div>
+        <div className="title-group">
+          <h1>{params.sessionName?.split("%").join(" ")}</h1>
+          <div className="welcome-message">{welcomeMessage}</div>
+        </div>
+      </div>
+
       <div className="main-group-container">
         {users
           .filter((user) => !user.viewOnly)
@@ -142,14 +147,21 @@ function Sessions() {
           ))}
       </div>
       {currentUser.admin && (
-        <button disabled={resultDisabled} onClick={handleShowResult}>
-          Show result
-        </button>
+        <div className="show-result-container">
+          <button
+            className="show-result-btn btn"
+            disabled={resultDisabled}
+            onClick={handleShowResult}
+          >
+            Show result
+          </button>
+        </div>
       )}
       {!currentUser.viewOnly && (
         <div className="selection-list-container">
           {[0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, "?"].map((selection) => (
             <div
+              key={selection}
               className={
                 selectedNumber === selection.toString()
                   ? "selection-card-active"
@@ -164,24 +176,28 @@ function Sessions() {
         </div>
       )}
 
-      {users.some((user) => user.viewOnly) && <p>Visitors</p>}
-      <div className="main-group-container">
-        {users
-          .filter((user) => user.viewOnly)
-          .map((filteredUser) => (
-            <UserCard
-              key={filteredUser.id}
-              user={filteredUser}
-              showResult={showResult}
-            />
-          ))}
-      </div>
+      {users.some((user) => user.viewOnly) && (
+        <div className="visitor-group">
+          <p className="visitor-title">Visitors</p>
+          <div className="main-group-container visitors-area">
+            {users
+              .filter((user) => user.viewOnly)
+              .map((filteredUser) => (
+                <UserCard
+                  key={filteredUser.id}
+                  user={filteredUser}
+                  showResult={showResult}
+                />
+              ))}
+          </div>
+        </div>
+      )}
 
       {currentUser.admin && (
-        <div>
-          <div>Invite people with this url</div>
+        <div className="invite-container">
+          <div className="invite-title">Invite people with this url</div>
           <input
-            className="invite-url"
+            className="text-input invite-url"
             readOnly
             name="invite-url"
             value={getSharedURL()}

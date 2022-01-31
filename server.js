@@ -12,7 +12,7 @@ const io = new Server(server, {
     origin:
       process.env.NODE_ENV === "production"
         ? process.env.REACT_APP_BACK_END_POINT
-        : "http://localhost:3000",
+        : "http://localhost:3003",
     methods: ["GET", "POST"],
   },
 });

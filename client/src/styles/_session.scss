@@ -1,0 +1,135 @@
+.session-container {
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    display: flex;
+
+    .main-logo {
+      img {
+        width: 100px;
+      }
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding-bottom: 10px;
+
+      h1 {
+        margin: 0;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .main-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 400px;
+    background-color: #28c8db;
+    border: 10px solid lightgray;
+    border-radius: 15px;
+  }
+
+  .visitors-area {
+    min-height: 200px;
+  }
+
+  .show-result-container {
+    display: flex;
+    justify-content: flex-end;
+    .show-result-btn {
+      margin-top: 10px;
+      background-color: #28c8db;
+    }
+  }
+
+  .selection-list-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .selection-card {
+    width: 25px;
+    height: 40px;
+    margin: 20px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: white;
+  }
+
+  .visitor-group {
+    display: flex;
+    flex-direction: column;
+
+    .visitor-title {
+      text-align: left;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      color: grey;
+    }
+  }
+
+  .user-selection {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: darkgreen;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .selection-card-active {
+    width: 20px;
+    height: 40px;
+    margin: 20px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: brown;
+    color: white;
+  }
+
+  .invite-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .invite-title {
+      font-size: 1.7rem;
+      color: darkgray;
+      text-transform: uppercase;
+    }
+    .invite-url {
+      width: 800px;
+      height: 80px;
+      white-space: pre-wrap;
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    .main-group-container,
+    .selection-list-container,
+    .show-result-container,
+    .header,
+    .visitor-group,
+    .invite-container {
+      width: 1024px;
+      margin: auto;
+    }
+  }
+}

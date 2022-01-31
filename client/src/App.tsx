@@ -1,17 +1,17 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import "./App.css";
 import Home from "./pages/home";
+import NewSession from "./pages/newSession";
 import Session from "./pages/sessions";
-import SessionAdmin from "./pages/sessionsAdmin";
-import SessionUser from "./pages/sessionsUser";
+import SessionUser from "./pages/newSessionsUser";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path='sessions/:sessionId/:sessionName/:name/:admin' element={<Session />} /> */}
+        <Route path="new" element={<NewSession />} />
+
         <Route
           path="sessions/:sessionId/:sessionName/:name/:admin/:sessionType"
           element={<Session />}
@@ -19,10 +19,6 @@ function App() {
         <Route
           path="sessionsUser/:sessionId/:sessionName"
           element={<SessionUser />}
-        />
-        <Route
-          path="sessionsAdmin/:sessionId/:sessionName"
-          element={<SessionAdmin />}
         />
       </Routes>
     </div>

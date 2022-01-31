@@ -1,62 +1,15 @@
-import React, { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 function Home() {
-  const [sessionInfo, setSessionInfo] = useState({
-    sessionName: "",
-    adminName: "",
-  });
-  const [viewOnly, setViewOnly] = useState(false);
-
-  function handleSessionIfoChange(event: ChangeEvent<HTMLInputElement>): void {
-    if (event.target.name === "session-name") {
-      setSessionInfo({
-        ...sessionInfo,
-        sessionName: event.target.value,
-      });
-    }
-
-    if (event.target.name === "admin-name") {
-      setSessionInfo({
-        ...sessionInfo,
-        adminName: event.target.value,
-      });
-    }
-  }
-
   return (
-    <div>
-      <h1>Poker A Plan</h1>
-      <input
-        name="session-name"
-        value={sessionInfo.sessionName}
-        onChange={handleSessionIfoChange}
-        type="text"
-        placeholder="Session name"
-      />
-      <input
-        name="admin-name"
-        value={sessionInfo.adminName}
-        onChange={handleSessionIfoChange}
-        type="text"
-        placeholder="Admin name"
-      />
-      <label>Spectator mode</label>
-      <input
-        onChange={() => setViewOnly((prevState) => !prevState)}
-        type="checkbox"
-      />
+    <div className="home-container">
+      <div className="main-logo">
+        <img src={logo} alt="logo" />
+      </div>
 
-      <Link
-        to={`/sessions/${
-          Math.random().toString(36).substring(2, 15) +
-          Math.random().toString(36).substring(2, 15)
-        }/${sessionInfo.sessionName}/${sessionInfo.adminName}/true/${
-          viewOnly ? "view" : "user"
-        }`}
-      >
-        {/* <Link to={`/sessionsAdmin/${Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}/${sessionInfo.sessionName}/`}> */}
-        <button>New session</button>
+      <Link to={"new"}>
+        <button className="get-started-btn btn">Get Started</button>
       </Link>
     </div>
   );

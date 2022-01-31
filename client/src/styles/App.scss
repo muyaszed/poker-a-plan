@@ -1,0 +1,45 @@
+@import "./home";
+@import "./newSession";
+@import "./session";
+@import "./userCard";
+
+.App {
+  text-align: center;
+  background-color: aqua;
+  height: 100vh;
+}
+
+.btn {
+  width: 300px;
+  height: 60px;
+  text-transform: uppercase;
+  font-size: 1.3rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.text-input {
+  width: 300px;
+  height: 60px;
+  margin-bottom: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 2rem;
+  text-transform: lowercase;
+  color: gray;
+  padding-left: 15px;
+}
+
+.text-input::placeholder {
+  font-size: 2rem;
+  text-transform: lowercase;
+  color: lightgray;
+}
+
+@media only screen and (min-width: 1024px) {
+  .selection-list-container {
+    width: 1024px;
+    margin: auto;
+  }
+}
