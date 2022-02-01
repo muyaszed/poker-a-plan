@@ -7,6 +7,22 @@
   text-align: center;
   background-color: aqua;
   height: 100vh;
+
+  .main-logo {
+    position: relative;
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+
+    img {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      right: -9999px;
+      bottom: -9999px;
+      margin: auto;
+    }
+  }
 }
 
 .btn {

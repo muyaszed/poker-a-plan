@@ -1,4 +1,9 @@
 .new-session-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   .new-input-group {
     display: flex;
     flex-direction: column;
